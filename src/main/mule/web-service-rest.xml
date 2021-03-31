@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="5ef16094-47c5-49ed-972b-c78ff6ad29e8" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="ce1b5c29-47cf-4d2e-835b-e5f1a188af76" >
+		<http:request-connection host="reqres.in" port="80" />
+	</http:request-config>
+	<flow name="web-service-restFlow" doc:id="7b772f60-b16b-4dee-bb03-d99f9587374d" >
+		<http:listener doc:name="Listener" doc:id="26559313-ace0-4c90-8a49-5b2a2183135e" config-ref="HTTP_Listener_config" path="/Test/{yourID}"/>
+		<set-variable value="#[attributes.uriParams.yourID]" doc:name="SETID" doc:id="dc564d34-e122-4924-87ff-831d8619302f" variableName="userid"/>
+		<logger level="INFO" doc:name="Logger" doc:id="98d17448-f26a-40ad-b32a-1b9e17624248" message="Invoking REST service by David"/>
+		<http:request method="GET" doc:name="Request" doc:id="e15f9ebb-c22e-433f-a53b-e623bd4bb4af" config-ref="HTTP_Request_configuration" path="#['/api/users/' ++ vars.userid]"/>
+	</flow>
+</mule>
